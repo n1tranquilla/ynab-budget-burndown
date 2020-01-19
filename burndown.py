@@ -1,5 +1,6 @@
 import requests
 import os
+import settings
 
 BUDGET_ID=os.getenv('BUDGET_ID')
 BEARER_TOKEN=os.getenv('BEARER_TOKEN')

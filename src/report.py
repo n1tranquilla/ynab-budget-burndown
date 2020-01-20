@@ -35,7 +35,6 @@ class Report:
         for row in group['categories']:
             budgeted = row['budgeted']
             activity = row['activity']
-            print(activity)
             if (budgeted > 0 and activity < 0):
 
                 # variables

@@ -28,8 +28,8 @@ class Report:
             group = None
 
 
-        columns = ['category', 'budgeted', 'balance', 'percent used']
-        report_string = '|'.join(str(x).ljust(30) for x in columns)+'\n'
+        columns = ['category', 'budgeted', 'balance']
+        report_string = '| '.join(str(x).ljust(30) for x in columns)+'\n'
         report_string += ('-' * len(report_string)+'\n')
 
         for row in group['categories']:
@@ -40,13 +40,10 @@ class Report:
                 # variables
                 budgeted = budgeted / 1000
                 balance = row['balance'] / 1000
-                name = row['name'] 
-                leftover = budgeted - balance
-                fractionLeftover = leftover / budgeted
-                percentUsed = fractionLeftover * 100
+                name = row['name']
 
                 # print the report_string
-                d = list([name,budgeted,balance,percentUsed])
-                report_string += '|'.join(str(x).ljust(30) for x in d)+'\n'
+                d = list([name,budgeted,balance])
+                report_string += '| '.join(str(x).ljust(30) for x in d)+'\n'
 
         return report_string

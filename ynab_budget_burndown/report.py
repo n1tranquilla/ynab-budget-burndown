@@ -7,6 +7,26 @@ class Report:
         self.token=token
         self.budget_id=budget_id
         self.category_id=category_id
+        self.column_spacing=10
+        self.first_column_spacing=30
+
+    def add_group_to_report(self,group):
+        report_string=''
+        for row in group['categories']:
+            budgeted = row['budgeted']
+            activity = row['activity']
+            if (budgeted > 0 and activity < 0):
+
+                # variables
+                budgeted = budgeted / 1000
+                balance = row['balance'] / 1000
+                name = row['name']
+
+                # print the report_string
+                d = list([str(name).ljust(self.first_column_spacing),budgeted,balance])
+                report_string += '| '.join(str(x).ljust(self.column_spacing) for x in d)+'\n'
+
+        return report_string
 
     def build_report_string(self):
 
@@ -19,31 +39,16 @@ class Report:
         resp = requests.get(url=url, headers=headers)
         data = resp.json() 
 
+        columns = [str('category').ljust(self.first_column_spacing), 'budgeted', 'balance']
+        report_string = '| '.join(str(x).ljust(self.column_spacing) for x in columns)+'\n'
+        report_string += ('-' * len(report_string)+'\n')
+
         groups = data['data']['category_groups']
 
         for group in groups:
-            if group['id'] == self.category_id:
-                break
-        else:
-            group = None
-
-
-        columns = ['category', 'budgeted', 'balance']
-        report_string = '| '.join(str(x).ljust(30) for x in columns)+'\n'
-        report_string += ('-' * len(report_string)+'\n')
-
-        for row in group['categories']:
-            budgeted = row['budgeted']
-            activity = row['activity']
-            if (budgeted > 0 and activity < 0):
-
-                # variables
-                budgeted = budgeted / 1000
-                balance = row['balance'] / 1000
-                name = row['name']
-
-                # print the report_string
-                d = list([name,budgeted,balance])
-                report_string += '| '.join(str(x).ljust(30) for x in d)+'\n'
-
+            if self.category_id is None:
+                report_string += self.add_group_to_report(group)
+            elif group['id'] == self.category_id:
+                report_string += self.add_group_to_report(group)       
+            
         return report_string

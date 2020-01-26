@@ -11,6 +11,8 @@ SENDER_EMAIL_ID=os.getenv("SENDER_EMAIL_ID")
 SENDER_EMAIL_PASSWORD=os.getenv("SENDER_EMAIL_PASSWORD")
 RECIPIENTS=os.getenv("RECIPIENTS")
 
+REPORT_TITLE=os.getenv("REPORT_TITLE")
+
 def main():
     report = Report(BEARER_TOKEN,BUDGET_ID,CATEGORY_ID)
     print('Building report...')
@@ -18,7 +20,9 @@ def main():
 
     dispatcher = Dispatcher(SENDER_EMAIL_ID,SENDER_EMAIL_PASSWORD,RECIPIENTS)
     print('Sending report...')
-    dispatcher.email("Disposable Income Report", message)
+    print(message)
+    
+    dispatcher.email(REPORT_TITLE, message)
     print('Report sent to '+RECIPIENTS)
 
 if  __name__ =='__main__':main()
